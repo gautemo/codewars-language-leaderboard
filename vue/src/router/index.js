@@ -13,7 +13,7 @@ export const router = createRouter({
     },
     {
       path: '/:leaderboard',
-      name: 'About',
+      name: 'Leaderboard',
       component: About,
     }
   ]
