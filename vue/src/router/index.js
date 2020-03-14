@@ -1,6 +1,6 @@
 import { createRouter, createHistory } from '@posva/vue-router-next'
 import Home from '../views/Home.vue'
-import About from '../views/About.vue'
+import Leaderboard from '../views/Leaderboard.vue'
 
 const routerHistory = createHistory()
 export const router = createRouter({
@@ -14,7 +14,7 @@ export const router = createRouter({
     {
       path: '/:leaderboard',
       name: 'Leaderboard',
-      component: About,
+      component: Leaderboard,
     }
   ]
 });

@@ -1,5 +1,5 @@
 <template>
-  <a href="https://gaute.app" target="_blank" rel="noopener">
+  <a href="https://gaute.dev" target="_blank" rel="noopener">
     <svg :height="size" :width="size" viewBox="0 0 496 512">
       <path
         fill="#000"

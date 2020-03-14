@@ -1,7 +1,5 @@
 <template>
-  <header>
-
-  </header>
+  <header></header>
   <main>
     <router-view/>
   </main>
@@ -25,6 +23,7 @@ export default {
   --main-color: #4481eb;
   --secondary-color: #04befe;
   --my-gradient: linear-gradient(to right, var(--main-color) 0%, var(--secondary-color) 100%);
+  --white: #f7f7f7;
 }
 
 body{
@@ -44,6 +43,7 @@ body{
 
 main{
   flex: 1;
+  width: 100%;
 }
 
 header, footer{
@@ -59,7 +59,7 @@ header::before{
   display: block;
   background: var(--my-gradient);
   clip-path: polygon(0 0,100% 0,100% 70%,0 100%);
-  height: 180px;
+  height: 130px;
 }
 
 header > a {
