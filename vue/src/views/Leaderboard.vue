@@ -26,6 +26,9 @@ function customColor(leaderboard){
 const retrieveWarriors = async (route) => {
   const getAllWarriors = functions.httpsCallable('getAllWarriors');
   const { data }  = await getAllWarriors({ leaderboard: route.value.params.leaderboard.toLowerCase() });
+  if(!data.success){
+    alert(data.msg);
+  }
   return data.users;
 }
 

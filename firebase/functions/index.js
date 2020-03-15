@@ -15,6 +15,9 @@ exports.addWarrior = functions.region('europe-west1').https.onCall(async (data, 
 
     const usersRef = db.collection('leaderboards').doc(board);
     const doc = await usersRef.get();
+    if(!doc.data()){
+        return { success: false, msg: 'Leaderboard does not exists' };
+    }
     if (doc.data().users.includes(user)){
         return { success: false, msg: 'User already exists.' };
     }
@@ -28,10 +31,13 @@ exports.getAllWarriors = functions.region('europe-west1').https.onCall(async (da
     const board = data.leaderboard;
     
     const doc = await db.collection('leaderboards').doc(board).get();
+    if (!doc.data()) {
+        return { success: false, msg: 'Leaderboard does not exists' };
+    }
     const usersPromise = doc.data().users.map(u => getCodeWarsUser(u));
 
     const usersInfo = await Promise.all(usersPromise);
-    return { users: usersInfo };
+    return { success: true, users: usersInfo };
 });
 
 const getCodeWarsUser = async username => {
