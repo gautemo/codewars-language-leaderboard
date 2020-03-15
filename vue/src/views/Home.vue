@@ -1,8 +1,10 @@
 <template>
-  <h1>Welcome to leaderboard for <a href="https://www.codewars.com/" target="_blank" rel="noopener">Codewars</a></h1>
-  <label for="leaderboard-input">Leaderboard:</label>
-  <input type="text" id="leaderboard-input" v-model="board">
-  <button @click="toBoard">Go</button>
+  <div>
+    <h1>Welcome to leaderboard for <a href="https://www.codewars.com/" target="_blank" rel="noopener">Codewars</a></h1>
+    <label for="leaderboard-input">Leaderboard:</label>
+    <input type="text" id="leaderboard-input" v-model="board">
+    <button @click="toBoard">Go</button>
+  </div>
 </template>
 
 <script>
@@ -44,5 +46,10 @@ button{
   font-size: 1.5em;
   padding: 20px;
   cursor: pointer;
+}
+
+div{
+  margin: 20px auto;
+  display: table;
 }
 </style>

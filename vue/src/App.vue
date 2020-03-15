@@ -34,16 +34,14 @@ body{
   font-family: 'Baloo Chettan 2', cursive;
   font-size: 1.05em;
   margin: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 
 main{
-  flex: 1;
   width: 100%;
+  flex: 1;
 }
 
 header, footer{

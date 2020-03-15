@@ -1,45 +1,45 @@
 <template>
-  <div class="clan-list">
-    <details v-for="(clan, i) in clans" :key="clan.name">
+  <div class="list">
+    <details v-for="(language, i) in languages" :key="language.key">
       <summary :style="{ background: `rgba(240, 125, 0, ${1 - i/3})` }">
-        <ClanInfo :clan="clan" :place="i" />
+        <Info :language="language" :place="i" />
       </summary>
-      <ClanPlayers :players="clan.users"/>
+      <!-- <ClanPlayers :players="clan.users"/> -->
     </details>
   </div>
 </template>
 
 <script>
+import Info from './Info'
+import Players from './Players'
+import { watch, computed } from 'vue';
+
 export default {
-  props: {
-    users: Array
+  setup(props){
+    const languages = computed(() =>  toLanguages(props.players))
+    return { languages }
   },
-  computed: {
-    clans(){
-      const clans = this.users.reduce((acc, cur) => {
-        let index = acc.findIndex(team => team.name === cur.clan);
-        if(index === -1){
-          acc.push({ name: cur.clan, users: [], totalHonor: 0 });
-          index = acc.length - 1;
-        }
-        acc[index].users.push(cur);
-        acc[index].totalHonor += cur.useHonor;
-        return acc;
-      }, []);
-      return clans.sort((a,b) => averageScore(b) - averageScore(a));
-    }
-  },
-  components:{
-    ClanInfo: () => import('./ClanInfo'),
-    ClanPlayers: () => import('./ClanPlayers')
-  }
+  components:{ Info, Players }
 }
 
 const averageScore = clan => clan.totalHonor / clan.users.length;
+
+const toLanguages = players => {
+  const map = new Map();
+  for(const p of players){
+    for(const [language, { score }] of Object.entries(p.ranks.languages)){
+      if(!map.has(language)){
+        map.set(language, []);
+      }
+      map.get(language).push({ user: p.username, score });
+    }
+  }
+  return map;
+}
 </script>
 
 <style scoped>
-.clan-list{
+.list{
   margin: 15px 0;
 }
 

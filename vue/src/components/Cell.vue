@@ -20,7 +20,7 @@ div{
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px;
+    margin: 10px 20px;
 }
 h3{
     font-weight: normal;

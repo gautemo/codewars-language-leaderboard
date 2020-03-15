@@ -4,12 +4,14 @@
       <h1>Leaderboard {{route.params.leaderboard}}</h1>
       <button>ADD WARRIOR</button>
     </div>
+    <Highscore :players="warriors"/>
   </div>
 </template>
 
 <script>
-import { inject, reactive } from 'vue'
+import { inject, reactive, toRefs } from 'vue'
 import { retrieveWarriors } from '@/api.js'
+import Highscore from '@/components/Highscore'
 
 function customColor(leaderboard){
   if(leaderboard.toLowerCase() == '2s'){
@@ -28,8 +30,9 @@ export default {
     })
     retrieveWarriors().then(warriors => state.warriors = warriors);
 
-    return { route }
-  }
+    return { route, ...toRefs(state) }
+  },
+  components: { Highscore }
 }
 </script>
 

@@ -1,26 +1,23 @@
 <template>
   <div class="row">
     <span class="place">{{place + 1}}</span>
-    <span class="name">{{clan.name}}</span>
+    <span class="name">{{name}}</span>
     <Cell title="Average Honor" :value="average"/>
-    <Cell title="Total Honor" :value="clan.totalHonor"/>
+    <Cell title="Total Honor" :value="total"/>
   </div>
 </template>
 
 <script>
+import Cell from './Cell'
+import { computed, watch } from 'vue'
+
 export default {
-  props: {
-    clan: Object,
-    place: Number
+  setup(props){
+    const total = computed(() => props.language[1].reduce((acc, current) => acc + current.score, 0));
+    const average = computed(() => (total.value / props.language[1].length).toFixed(2));
+    return { place: props.place, name: props.language[0], total, average}
   },
-  computed:{
-      average(){
-          return parseFloat((this.clan.totalHonor / this.clan.users.length).toFixed(2));
-      }
-  },
-  components: {
-      Cell: () => import('./Cell')
-  }
+  components: { Cell }
 }
 
 </script>
