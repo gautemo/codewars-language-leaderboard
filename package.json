@@ -2,7 +2,6 @@
     "scripts": {
         "deploy": "npm run build --prefix vue && (cd firebase && firebase deploy)",
         "serve": "npm run serve --prefix vue",
-        "serve-firebase": "(cd firebase && firebase emulators:start)",
-        "pipeline-deploy": "npm run build --prefix vue && (cd firebase && firebase deploy --token ${{ secrets.FIREBASE_TOKEN }})"
+        "serve-firebase": "(cd firebase && firebase emulators:start)"
     }
 }
