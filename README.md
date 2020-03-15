@@ -16,6 +16,7 @@ If serving and deploying firebase:
 
 ## serve
 Vue: `npm run serve`
+
 Firebase: `npm run serve-firebase`
 
 ## deploy
