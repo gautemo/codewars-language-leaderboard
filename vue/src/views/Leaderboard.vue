@@ -2,7 +2,10 @@
   <div class="container">
     <div class="header">
       <h1>Leaderboard {{route.params.leaderboard}}</h1>
-      <button>ADD WARRIOR</button>
+      <transition name="slide">
+        <input type="text" v-model="addUser.name" v-if="addUser.showInput" @keyup.enter="add">
+      </transition>
+      <button @click="add" :class="{ active: addUser.showInput }">ADD WARRIOR</button>
     </div>
     <Highscore :players="warriors"/>
   </div>
@@ -12,6 +15,7 @@
 import { inject, reactive, toRefs } from 'vue'
 import { retrieveWarriors } from '@/api.js'
 import Highscore from '@/components/Highscore'
+import firebase from '@/firebaseinit';
 
 function customColor(leaderboard){
   if(leaderboard.toLowerCase() == '2s'){
@@ -30,7 +34,33 @@ export default {
     })
     retrieveWarriors().then(warriors => state.warriors = warriors);
 
-    return { route, ...toRefs(state) }
+    const addUser = reactive({
+      showInput: false,
+      name: ''
+    });
+    const add = async () => {
+      if(!addUser.showInput){
+        addUser.showInput = true;
+        return;
+      }
+      if(!addUser.name){
+        return;
+      }
+      // const functiona = firebase.app().functions('europe-west1');
+      // functiona.useFunctionsEmulator('http://localhost:5001');
+      // const addWarrior = functiona.httpsCallable('addWarrior');
+      const addWarrior = firebase.app().functions('europe-west1').httpsCallable('addWarrior');
+      const res = await addWarrior({leaderboard: route.value.params.leaderboard.toLowerCase(), user: 'gautemo'});
+      if(!res.success){
+        alert(res.msg);
+      }
+
+      addUser.showInput = false;
+      addUser.name = '';
+      //TODO reload api call
+    }
+
+    return { route, ...toRefs(state), add, addUser }
   },
   components: { Highscore }
 }
@@ -54,6 +84,7 @@ export default {
 }
 
 .header button{
+  height: 40px;
   border: 2px solid var(--white);
   background: transparent;
   color: var(--white);
@@ -67,5 +98,32 @@ export default {
 .header button:hover{
   border: 2px solid var(--main-color);
   color: var(--main-color);
+}
+
+.header button.active{
+  border: 2px solid rgb(5, 158, 5);
+  color: rgb(5, 158, 5);
+}
+
+input{
+  align-self: center;
+  font-size: 1.1em;
+  width: 175px;
+  box-sizing: border-box;
+  height: 40px;
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all 1.5s;
+}
+.slide-enter-from {
+  width: 0;
+}
+
+.slide-leave-active {
+  transition: opacity .3s;
+}
+.slide-leave-to {
+  opacity: 0;
 }
 </style>

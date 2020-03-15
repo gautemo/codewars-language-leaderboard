@@ -41,12 +41,13 @@ export default {
 }
 .place{
     background: var(--white);
-    color: var(--secondary-color);
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     font-size: 1.2em;
+    font-weight: bold;
     height: 30px;
     width: 30px;
     margin: 15px;

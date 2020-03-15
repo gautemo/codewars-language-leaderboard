@@ -7,5 +7,6 @@ module.exports = {
             swSrc: 'src/sw.js'
             // ...other Workbox options...
         }
-    }
+    },
+    outputDir: '../firebase/public',
 }
