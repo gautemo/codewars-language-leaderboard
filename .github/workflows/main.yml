@@ -12,17 +12,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: npm i - firebase
-      run: |
-        cd firebase
-        npm i
-        cd ..
-    - name: npm i - vue
+    - name: vue - install & build
       run: |
         cd vue
         npm i
+        npm run build
         cd ..
-    - name: Build & Firebase Deploy
+    - name: firebase - install & deploy
       run: |
+        cd firebase
+        npm i
         sudo npm install -g firebase-tools
-        npm run pipeline-deploy
+        firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
