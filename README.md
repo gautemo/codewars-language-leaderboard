@@ -1,6 +1,8 @@
 # codewars-language-leaderboard
 Leaderboard for Codewars
 
+Hosted on firebase at [codewars-leaderboard-1.web.app](https://codewars-leaderboard-1.web.app)
+
 ## Getting started
 * clone repo
 * cd firebase
