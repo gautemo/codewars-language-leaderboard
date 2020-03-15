@@ -2,8 +2,8 @@
   <div class="row">
     <span class="place">{{place + 1}}</span>
     <span class="name">{{name}}</span>
-    <Cell title="Average Honor" :value="average"/>
-    <Cell title="Total Honor" :value="total"/>
+    <Cell title="Average Score" :value="average"/>
+    <Cell title="Total Score" :value="total"/>
   </div>
 </template>
 

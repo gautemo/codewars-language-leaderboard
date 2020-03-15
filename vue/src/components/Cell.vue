@@ -7,9 +7,8 @@
 
 <script>
 export default {
-  props: {
-    title: String,
-    value: String
+  setup(props){
+    return { ...props }
   }
 }
 

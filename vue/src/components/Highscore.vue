@@ -1,10 +1,10 @@
 <template>
   <div class="list">
-    <details v-for="(language, i) in languages" :key="language.key">
+    <details v-for="(language, i) in languages" :key="language[0]">
       <summary :style="{ background: `rgba(240, 125, 0, ${1 - i/3})` }">
         <Info :language="language" :place="i" />
       </summary>
-      <!-- <ClanPlayers :players="clan.users"/> -->
+      <Players :players="language[1]"/>
     </details>
   </div>
 </template>
@@ -34,8 +34,10 @@ const toLanguages = players => {
       map.get(language).push({ user: p.username, score });
     }
   }
-  return map;
+  return [...map].sort((a,b) => total(b[1]) - total(a[1]));
 }
+
+const total = arr => arr.reduce((acc, current) => acc + current.score, 0)
 </script>
 
 <style scoped>
