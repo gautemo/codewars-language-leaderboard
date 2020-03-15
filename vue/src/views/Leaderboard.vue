@@ -50,9 +50,9 @@ export default {
       // functiona.useFunctionsEmulator('http://localhost:5001');
       // const addWarrior = functiona.httpsCallable('addWarrior');
       const addWarrior = firebase.app().functions('europe-west1').httpsCallable('addWarrior');
-      const res = await addWarrior({leaderboard: route.value.params.leaderboard.toLowerCase(), user: 'gautemo'});
-      if(!res.success){
-        alert(res.msg);
+      const { data }  = await addWarrior({leaderboard: route.value.params.leaderboard.toLowerCase(), user: addUser.name});
+      if(!data.success){
+        alert(data.msg);
       }
 
       addUser.showInput = false;
