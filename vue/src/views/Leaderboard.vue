@@ -13,15 +13,43 @@
 
 <script>
 import { inject, reactive, toRefs } from 'vue'
-import { retrieveWarriors } from '@/api.js'
 import Highscore from '@/components/Highscore'
-import firebase from '@/firebaseinit';
+import { functions } from '@/firebaseinit';
 
 function customColor(leaderboard){
   if(leaderboard.toLowerCase() == '2s'){
     document.documentElement.style.setProperty('--main-color', '#cf022b');
     document.documentElement.style.setProperty('--secondary-color', '#ef7c05');
   }
+}
+
+const retrieveWarriors = async (route) => {
+  const getAllWarriors = functions.httpsCallable('getAllWarriors');
+  const { data }  = await getAllWarriors({ leaderboard: route.value.params.leaderboard.toLowerCase() });
+  return data.users;
+}
+
+const addWarrior = async (addUser, route) => {
+  if(!addUser.showInput){
+    addUser.showInput = true;
+    return false;
+  }
+  if(!addUser.name){
+    return false;
+  }
+  // const functiona = firebase.app().functions('europe-west1');
+  // functiona.useFunctionsEmulator('http://localhost:5001');
+  // const addWarrior = functiona.httpsCallable('addWarrior');
+  const addWarrior = functions.httpsCallable('addWarrior');
+  const { data }  = await addWarrior({leaderboard: route.value.params.leaderboard.toLowerCase(), user: addUser.name});
+  if(!data.success){
+    alert(data.msg);
+    return false;
+  }
+
+  addUser.showInput = false;
+  addUser.name = '';
+  return true;
 }
 
 export default {
@@ -32,32 +60,18 @@ export default {
     const state = reactive({
       warriors: []
     })
-    retrieveWarriors().then(warriors => state.warriors = warriors);
+    retrieveWarriors(route).then(warriors => state.warriors = warriors);
 
     const addUser = reactive({
       showInput: false,
       name: ''
     });
     const add = async () => {
-      if(!addUser.showInput){
-        addUser.showInput = true;
-        return;
+      const reload = await addWarrior(addUser, route);
+      if(reload){
+        const warriors = await retrieveWarriors(route)
+        state.warriors = warriors;
       }
-      if(!addUser.name){
-        return;
-      }
-      // const functiona = firebase.app().functions('europe-west1');
-      // functiona.useFunctionsEmulator('http://localhost:5001');
-      // const addWarrior = functiona.httpsCallable('addWarrior');
-      const addWarrior = firebase.app().functions('europe-west1').httpsCallable('addWarrior');
-      const { data }  = await addWarrior({leaderboard: route.value.params.leaderboard.toLowerCase(), user: addUser.name});
-      if(!data.success){
-        alert(data.msg);
-      }
-
-      addUser.showInput = false;
-      addUser.name = '';
-      //TODO reload api call
     }
 
     return { route, ...toRefs(state), add, addUser }
