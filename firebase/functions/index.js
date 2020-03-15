@@ -8,9 +8,8 @@ exports.addWarrior = functions.region('europe-west1').https.onCall(async (data, 
     const board = data.leaderboard;
     const user = data.user;
 
-    const cwRes = await fetch(`https://www.codewars.com/api/v1/users/${user}`);
-    const cwData = await cwRes.json();
-    if(cwData.reason === 'not found'){
+    const cwData = await getCodeWarsUser(user);
+    if (cwData.reason === 'not found'){
         return { success: false, msg: 'User does not exist in Codewars.' };
     }
 
@@ -24,3 +23,18 @@ exports.addWarrior = functions.region('europe-west1').https.onCall(async (data, 
     });
     return { success: true, msg: 'User added.' };
 });
+
+exports.getAllWarriors = functions.region('europe-west1').https.onCall(async (data, context) => {
+    const board = data.leaderboard;
+    
+    const doc = await db.collection('leaderboards').doc(board).get();
+    const usersPromise = doc.data().users.map(u => getCodeWarsUser(u));
+
+    const usersInfo = await Promise.all(usersPromise);
+    return { users: usersInfo };
+});
+
+const getCodeWarsUser = async username => {
+    const resp = await fetch(`https://www.codewars.com/api/v1/users/${username}`);
+    return await resp.json();
+}
