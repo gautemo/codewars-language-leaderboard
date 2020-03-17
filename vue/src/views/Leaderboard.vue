@@ -2,12 +2,16 @@
   <div class="container">
     <div class="header">
       <h1>Leaderboard {{route.params.leaderboard}}</h1>
+      <div class="sort">
+        <button class="toggle" :class="{ sel: !allTime }" @click="allTime = false">MONTH</button>
+        <button class="toggle" :class="{ sel: allTime}" @click="allTime = true">ALL-TIME</button>
+      </div>
       <transition name="slide">
         <input type="text" v-model="addUser.name" v-if="addUser.showInput" @keyup.enter="add">
       </transition>
       <button @click="add" :class="{ active: addUser.showInput }">ADD WARRIOR</button>
     </div>
-    <Highscore :players="warriors"/>
+    <Highscore :players="warriors" :allTime="allTime"/>
   </div>
 </template>
 
@@ -61,7 +65,8 @@ export default {
     customColor(route.value.params.leaderboard)
 
     const state = reactive({
-      warriors: []
+      warriors: [],
+      allTime: false,
     })
     retrieveWarriors(route).then(warriors => state.warriors = warriors);
 
@@ -93,10 +98,15 @@ export default {
 
 .header{
   display: flex;
-  margin: 0 20px;
+  margin: 20px;
 }
 
 .header h1{
+  position: absolute;
+  top: 0;
+}
+
+.sort{
   flex: 1;
 }
 
@@ -142,5 +152,11 @@ input{
 }
 .slide-leave-to {
   opacity: 0;
+}
+
+.sort .toggle.sel{
+  background: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  color: var(--white);
 }
 </style>

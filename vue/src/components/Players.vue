@@ -18,7 +18,10 @@ import { computed } from 'vue'
 
 export default {
     setup(props){
-        const playersSorted = computed(() => [...props.players].sort((a,b) => b.score - a.score));
+        let sortBy = 'score';
+        if(!props.allTime) sortBy = 'monthScore'
+
+        const playersSorted = computed(() => [...props.players].sort((a,b) => b[sortBy] - a[sortBy]));
 
         return { players: props.players, playersSorted }
     },
