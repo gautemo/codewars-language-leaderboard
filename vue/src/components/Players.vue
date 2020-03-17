@@ -6,6 +6,7 @@
                     {{player.user}}
                 </a>
             </span>
+            <Cell title="Month Score" :value="player.monthScore"/>
             <Cell title="Honor" :value="player.score"/>
         </div>
     </div>

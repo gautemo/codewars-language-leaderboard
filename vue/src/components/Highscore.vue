@@ -27,11 +27,11 @@ const averageScore = clan => clan.totalHonor / clan.users.length;
 const toLanguages = players => {
   const map = new Map();
   for(const p of players){
-    for(const [language, { score }] of Object.entries(p.ranks.languages)){
+    for(const [language, { score, monthScore }] of Object.entries(p.ranks.languages)){
       if(!map.has(language)){
         map.set(language, []);
       }
-      map.get(language).push({ user: p.username, score });
+      map.get(language).push({ user: p.username, score, monthScore });
     }
   }
   return [...map].sort((a,b) => total(b[1]) - total(a[1]));

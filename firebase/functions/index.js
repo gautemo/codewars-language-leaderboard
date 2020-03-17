@@ -22,8 +22,10 @@ exports.addWarrior = functions.region('europe-west1').https.onCall(async (data, 
         return { success: false, msg: 'User already exists.' };
     }
     await usersRef.update({
-        users: admin.firestore.FieldValue.arrayUnion(user)
+        users: admin.firestore.FieldValue.arrayUnion(user),
+        startOfMonth: admin.firestore.FieldValue.arrayUnion(`${user}~${JSON.stringify(cwData.ranks.languages)}`)
     });
+
     return { success: true, msg: 'User added.' };
 });
 
@@ -31,13 +33,34 @@ exports.getAllWarriors = functions.region('europe-west1').https.onCall(async (da
     const board = data.leaderboard;
     
     const doc = await db.collection('leaderboards').doc(board).get();
-    if (!doc.data()) {
+    const leaderboard = doc.data();
+    if (!leaderboard) {
         return { success: false, msg: 'Leaderboard does not exists' };
     }
-    const usersPromise = doc.data().users.map(u => getCodeWarsUser(u));
+    const usersPromise = leaderboard.users.map(u => getCodeWarsUser(u));
 
     const usersInfo = await Promise.all(usersPromise);
+    for(const user of usersInfo){
+        const startOfMonth = JSON.parse(leaderboard.startOfMonth.find(s => s.split('~')[0] === user.username).split('~')[1]);
+        for (const [language, { score }] of Object.entries(startOfMonth)) {
+            const lang = user.ranks.languages[language];
+            lang.monthScore = lang.score - score;
+        }
+    }
     return { success: true, users: usersInfo };
+});
+
+exports.resetMonthscore = functions.region('europe-west1').pubsub.schedule('1 of month 00:00').timeZone('Europe/Oslo').onRun(async (context) => {
+    const boards = await db.collection('leaderboards').get();
+    for (const doc of boards.docs) {
+        const startOfMonth = [];
+        for(const user of doc.data().users){
+            const cwData = await getCodeWarsUser(user);
+            startOfMonth.push(`${user}~${JSON.stringify(cwData.ranks.languages)}`);
+        }
+        await db.collection('leaderboards').doc(doc.id).update({startOfMonth});
+    }
+    return null;
 });
 
 const getCodeWarsUser = async username => {

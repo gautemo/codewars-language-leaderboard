@@ -2,7 +2,7 @@
   <div class="row">
     <span class="place">{{place + 1}}</span>
     <span class="name">{{name}}</span>
-    <Cell title="Average Score" :value="average"/>
+    <Cell title="Month Score" :value="month"/>
     <Cell title="Total Score" :value="total"/>
   </div>
 </template>
@@ -14,8 +14,8 @@ import { computed, watch } from 'vue'
 export default {
   setup(props){
     const total = computed(() => props.language[1].reduce((acc, current) => acc + current.score, 0));
-    const average = computed(() => (total.value / props.language[1].length).toFixed(2));
-    return { place: props.place, name: props.language[0], total, average}
+    const month = computed(() => props.language[1].reduce((acc, current) => acc + current.monthScore, 0));
+    return { place: props.place, name: props.language[0], total, month}
   },
   components: { Cell }
 }
