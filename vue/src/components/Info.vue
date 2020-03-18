@@ -14,7 +14,7 @@ import { state } from '@/state.js';
 
 export default {
   setup(props){
-    const total = computed(() => console.log('evals', props.language) || props.language[1].reduce((acc, current) => acc + current.score, 0));
+    const total = computed(() => props.language[1].reduce((acc, current) => acc + current.score, 0));
     const month = computed(() => props.language[1].reduce((acc, current) => acc + current.monthScore, 0));
     return { place: toRefs(props).place, name: props.language[0], total, month}
   },
@@ -52,5 +52,15 @@ export default {
     height: 30px;
     width: 30px;
     margin: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+  .place{
+    margin: 5px;
+  }
+
+  .name{
+    margin: 0 5px;
+  }
 }
 </style>

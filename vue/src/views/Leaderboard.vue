@@ -70,12 +70,15 @@ export default {
 
 .header{
   display: flex;
-  margin: 20px;
+  margin: 20px 25px;
+  flex-flow: wrap;
+  justify-content: flex-end;
 }
 
 .header h1{
   position: absolute;
   top: 0;
+  left: 25px;
 }
 
 .sort{

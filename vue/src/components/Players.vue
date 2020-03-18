@@ -7,7 +7,7 @@
                 </a>
             </span>
             <Cell title="Month Score" :value="player.monthScore"/>
-            <Cell title="Honor" :value="player.score"/>
+            <Cell title="Total Score" :value="player.score"/>
         </div>
     </div>
 </template>
@@ -22,7 +22,13 @@ export default {
         let sortBy = 'score';
         if(!props.allTime) sortBy = 'monthScore'
 
-        const playersSorted = computed(() => [...props.players].sort((a,b) => b[state.sortBy] - a[state.sortBy]));
+        const playersSorted = computed(() => [...props.players].sort((a,b) => {
+            const diff = b[state.sortBy] - a[state.sortBy];
+            if(diff !== 0){
+                return diff;
+            }
+            return b[state.thenSortBy] - a[state.thenSortBy];
+        }));
 
         return { playersSorted }
     },

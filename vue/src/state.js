@@ -14,16 +14,22 @@ const state = reactive({
                 map.get(language).push({ user: p.username, score, monthScore });
             }
         }
-        return [...map].sort((a, b) => total(b[1]) - total(a[1]));
+        return [...map].sort((a, b) => {
+            const diff = total(b[1], state.sortBy) - total(a[1], state.sortBy);
+            if(diff !== 0){
+                return diff;
+            }
+            return total(b[1], state.thenSortBy) - total(a[1], state.thenSortBy);
+        });
     }),
     allTime: false,
     sortBy: computed(() => state.allTime ? 'score' : 'monthScore'),
+    thenSortBy: computed(() => state.allTime ? 'monthScore' : 'score'),
 })
 
-const total = arr => arr.reduce((acc, current) => acc + current[state.sortBy], 0)
+const total = (arr, score) => arr.reduce((acc, current) => acc + current[score], 0)
 
 const reload = async () => {
-    console.log('reloading')
     const getAllWarriors = functions.httpsCallable('getAllWarriors');
     const { data } = await getAllWarriors({ leaderboard: state.board.toLowerCase() });
     if (!data.success) {

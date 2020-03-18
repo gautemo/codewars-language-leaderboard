@@ -29,5 +29,12 @@ h3{
 }
 h2,h3{
     margin: 0;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+  div{
+    margin: 10px 5px;
+  }
 }
 </style>
