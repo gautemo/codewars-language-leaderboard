@@ -6,9 +6,11 @@
 </template>
 
 <script>
+import { toRefs } from 'vue'
 export default {
   setup(props){
-    return { ...props }
+    const { title, value } = toRefs(props);
+    return { title, value } 
   }
 }
 

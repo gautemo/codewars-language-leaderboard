@@ -15,15 +15,16 @@
 <script>
 import Cell from './Cell'
 import { computed } from 'vue'
+import { state } from '@/state.js';
 
 export default {
     setup(props){
         let sortBy = 'score';
         if(!props.allTime) sortBy = 'monthScore'
 
-        const playersSorted = computed(() => [...props.players].sort((a,b) => b[sortBy] - a[sortBy]));
+        const playersSorted = computed(() => [...props.players].sort((a,b) => b[state.sortBy] - a[state.sortBy]));
 
-        return { players: props.players, playersSorted }
+        return { playersSorted }
     },
     components: { Cell }
 }

@@ -9,13 +9,14 @@
 
 <script>
 import Cell from './Cell'
-import { computed, watch } from 'vue'
+import { computed, watch, toRefs } from 'vue'
+import { state } from '@/state.js';
 
 export default {
   setup(props){
-    const total = computed(() => props.language[1].reduce((acc, current) => acc + current.score, 0));
+    const total = computed(() => console.log('evals', props.language) || props.language[1].reduce((acc, current) => acc + current.score, 0));
     const month = computed(() => props.language[1].reduce((acc, current) => acc + current.monthScore, 0));
-    return { place: props.place, name: props.language[0], total, month}
+    return { place: toRefs(props).place, name: props.language[0], total, month}
   },
   components: { Cell }
 }

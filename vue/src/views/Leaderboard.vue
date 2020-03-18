@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <h1>Leaderboard {{route.params.leaderboard}}</h1>
+      <h1>Leaderboard {{board}}</h1>
       <div class="sort">
         <button class="toggle" :class="{ sel: !allTime }" @click="allTime = false">MONTH</button>
         <button class="toggle" :class="{ sel: allTime}" @click="allTime = true">ALL-TIME</button>
@@ -11,7 +11,7 @@
       </transition>
       <button @click="add" :class="{ active: addUser.showInput }">ADD WARRIOR</button>
     </div>
-    <Highscore :players="warriors" :allTime="allTime"/>
+    <Highscore/>
   </div>
 </template>
 
@@ -19,6 +19,7 @@
 import { inject, reactive, toRefs } from 'vue'
 import Highscore from '@/components/Highscore'
 import { functions } from '@/firebaseinit';
+import { state, addWarrior } from '@/state.js';
 
 function customColor(leaderboard){
   if(leaderboard.toLowerCase() == '2s'){
@@ -27,62 +28,33 @@ function customColor(leaderboard){
   }
 }
 
-const retrieveWarriors = async (route) => {
-  const getAllWarriors = functions.httpsCallable('getAllWarriors');
-  const { data }  = await getAllWarriors({ leaderboard: route.value.params.leaderboard.toLowerCase() });
-  if(!data.success){
-    alert(data.msg);
-  }
-  return data.users;
-}
-
-const addWarrior = async (addUser, route) => {
-  if(!addUser.showInput){
-    addUser.showInput = true;
-    return false;
-  }
-  if(!addUser.name){
-    return false;
-  }
-  // const functiona = firebase.app().functions('europe-west1');
-  // functiona.useFunctionsEmulator('http://localhost:5001');
-  // const addWarrior = functiona.httpsCallable('addWarrior');
-  const addWarrior = functions.httpsCallable('addWarrior');
-  const { data }  = await addWarrior({leaderboard: route.value.params.leaderboard.toLowerCase(), user: addUser.name});
-  if(!data.success){
-    alert(data.msg);
-    return false;
-  }
-
-  addUser.showInput = false;
-  addUser.name = '';
-  return true;
-}
-
 export default {
   setup(){
     const route = inject('route');
     customColor(route.value.params.leaderboard)
-
-    const state = reactive({
-      warriors: [],
-      allTime: false,
-    })
-    retrieveWarriors(route).then(warriors => state.warriors = warriors);
+    state.board = route.value.params.leaderboard;
 
     const addUser = reactive({
       showInput: false,
       name: ''
     });
     const add = async () => {
-      const reload = await addWarrior(addUser, route);
-      if(reload){
-        const warriors = await retrieveWarriors(route)
-        state.warriors = warriors;
+      if(!addUser.showInput){
+        addUser.showInput = true;
+        return;
+      }
+      if(!addUser.name){
+        return;
+      }
+      const success = await addWarrior(addUser.name);
+
+      if(success){
+        addUser.showInput = false;
+        addUser.name = '';
       }
     }
 
-    return { route, ...toRefs(state), add, addUser }
+    return { board: state.board, allTime: toRefs(state).allTime, add, addUser }
   },
   components: { Highscore }
 }
