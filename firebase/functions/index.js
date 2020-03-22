@@ -42,9 +42,11 @@ exports.getAllWarriors = functions.region('europe-west1').https.onCall(async (da
     const usersInfo = await Promise.all(usersPromise);
     for(const user of usersInfo){
         const startOfMonth = JSON.parse(leaderboard.startOfMonth.find(s => s.split('~')[0] === user.username).split('~')[1]);
-        for (const [language, { score }] of Object.entries(startOfMonth)) {
-            const lang = user.ranks.languages[language];
-            lang.monthScore = lang.score - score;
+        for (const [name, lang] of Object.entries(user.ranks.languages)) {
+            lang.monthScore = lang.score;
+            if (startOfMonth[name]) {
+                lang.monthScore -= langStartOfMonth.score;
+            }
         }
     }
     return { success: true, users: usersInfo };
