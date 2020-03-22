@@ -45,7 +45,7 @@ exports.getAllWarriors = functions.region('europe-west1').https.onCall(async (da
         for (const [name, lang] of Object.entries(user.ranks.languages)) {
             lang.monthScore = lang.score;
             if (startOfMonth[name]) {
-                lang.monthScore -= langStartOfMonth.score;
+                lang.monthScore -= startOfMonth[name].score;
             }
         }
     }
