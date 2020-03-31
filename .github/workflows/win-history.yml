@@ -14,7 +14,7 @@ jobs:
     - name: screenshot leaderboard
       uses: ./actions/history-screenshots/
       with:
-        api-key: ${{ FIREBASE_FUNCTION_KEY }}
+        api-key: ${{ secrets.FIREBASE_FUNCTION_KEY }}
     - name: Commit file to repo
       continue-on-error: true
       run: |
