@@ -39,7 +39,7 @@ const screenshot = async (browser, board) => {
         if (!fs.existsSync(board)) {
             fs.mkdirSync(board)
         }
-        await page.screenshot({ path: `${board}/${timestamp()}.png`, fullPage: true });
+        await page.screenshot({ path: `history/${board}/${timestamp()}.png`, fullPage: true });
 
         await browser.close();
     }
