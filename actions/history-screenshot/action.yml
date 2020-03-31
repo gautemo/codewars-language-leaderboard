@@ -1,0 +1,9 @@
+name: 'Screenshot History'
+description: 'Takes a screenshot of every leaderboard at the end of the month'
+inputs:
+  api-key:
+    description: 'api key for cloud function to get leaderboards'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

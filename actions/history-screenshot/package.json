@@ -1,0 +1,28 @@
+{
+  "name": "history-screenshot",
+  "version": "1.0.0",
+  "description": "Takes a screenshot of the leaderboard before new month",
+  "main": "dist/index.js",
+  "scripts": {
+    "package": "ncc build index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gautemo/codewars-language-leaderboard.git"
+  },
+  "keywords": [
+    "GitHub",
+    "Action"
+  ],
+  "author": "Gaute Meek Olsen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gautemo/codewars-language-leaderboard/issues"
+  },
+  "homepage": "https://github.com/gautemo/codewars-language-leaderboard#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.3",
+    "@actions/github": "^2.1.1",
+    "puppeteer": "^2.1.1"
+  }
+}
