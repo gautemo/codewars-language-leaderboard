@@ -65,6 +65,28 @@ exports.resetMonthscore = functions.region('europe-west1').pubsub.schedule('1 of
     return null;
 });
 
+const validBearer = (request) => {
+    const key = functions.config().api.key;
+
+    const authorization = request.get('Authorization');
+    if(!authorization) return false;
+
+    const [_, bearerKey] = authorization.split('Bearer ');
+    return key === bearerKey;
+}
+
+exports.getOpenLeaderboards = functions.region('europe-west1').https.onRequest(async (req, res) => {
+    if (!validBearer(req)) {
+        res.status(400).json({
+            error: 'Not Authorized'
+        });
+        return;
+    }
+
+    const boards = await db.collection('leaderboards').get();
+    res.status(200).send(boards.docs.map(doc => doc.id));
+});
+
 const getCodeWarsUser = async username => {
     const resp = await fetch(`https://www.codewars.com/api/v1/users/${username}`);
     return await resp.json();
