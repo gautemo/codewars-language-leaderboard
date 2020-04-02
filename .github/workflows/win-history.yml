@@ -2,7 +2,7 @@ name: Win History
 
 on:
   schedule:
-    - cron: '02 18 * * *'
+    - cron: '10 18 * * *'
 
 jobs:
   screenshots:
