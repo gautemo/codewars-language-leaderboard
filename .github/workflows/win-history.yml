@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: npm i action
-      run: (cd .\actions\history-screenshot\ && npm i)
+      run: (cd actions/history-screenshot && npm i)
     - name: screenshot leaderboard
       uses: ./actions/history-screenshot/
       with:
