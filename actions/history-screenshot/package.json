@@ -2,10 +2,7 @@
   "name": "history-screenshot",
   "version": "1.0.0",
   "description": "Takes a screenshot of the leaderboard before new month",
-  "main": "dist/index.js",
-  "scripts": {
-    "package": "ncc build index.js"
-  },
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gautemo/codewars-language-leaderboard.git"
