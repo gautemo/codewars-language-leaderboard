@@ -20,7 +20,9 @@ const getBoards = async apiKey => {
             'Authorization': `Bearer ${apiKey}`,
         }
     });
-    return await response.json();
+    const boards = await response.json();
+    console.log(`found boards: ${boards.join(', ')}`);
+    return boards;
 }
 
 const timestamp = () => new Date().toISOString().replace(/\.|:/g, '-');
@@ -37,11 +39,13 @@ const screenshot = async (browser, board) => {
         };
         await sleep(500);
         
-        if (!fs.existsSync(board)) {
-            fs.mkdirSync(board)
+        console.log(`opened ${details.length} details`);
+        if (!fs.existsSync(`history/${board}`)) {
+            fs.mkdirSync(`history/${board}`)
         }
-        await page.screenshot({ path: `history/${board}/${timestamp()}.png`, fullPage: true });
-
+        const filename = `history/${board}/${timestamp()}.png`;
+        await page.screenshot({ path: filename, fullPage: true });
+        console.log(`took screenshot: ${filename}`);
         await browser.close();
     }
     catch (error) {
