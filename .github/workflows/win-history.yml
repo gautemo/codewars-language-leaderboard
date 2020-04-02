@@ -1,8 +1,8 @@
 name: Win History
 
 on:
-  push:
-    branches: [ master, screenshot-action ]
+  schedule:
+    - cron: 'L * * * *'
 
 jobs:
   screenshots:
