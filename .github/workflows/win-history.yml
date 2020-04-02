@@ -1,0 +1,28 @@
+name: Win History
+
+on:
+  schedule:
+    - cron: '02 18 * * *'
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: npm i action
+      run: (cd actions/history-screenshot && npm i)
+    - name: screenshot leaderboard
+      uses: ./actions/history-screenshot/
+      with:
+        api-key: ${{ secrets.FIREBASE_FUNCTION_KEY }}
+    - name: Commit file to repo
+      continue-on-error: true
+      run: |
+        git status
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "GitHub Action, history at the end of the month"
+        git push
