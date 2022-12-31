@@ -1,8 +1,7 @@
 name: Win History
 
 on:
-  schedule:
-    - cron: '50 21,22 28,29,30,31 * *'
+  workflow_dispatch:
 
 jobs:
   screenshots:
